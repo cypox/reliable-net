@@ -1,0 +1,77 @@
+name: "reliable-net"
+layer {
+  name: "input0"
+  type: "Input"
+  top: "input0"
+  input_param {
+    shape:
+    {
+      dim: 1
+      dim: 1
+      dim: 103 
+      dim: 1
+    }
+  }
+}
+
+layer {
+  name: "conv_layer_1"
+  type: "Convolution"
+  bottom: "input0"
+  top: "conv_layer_1"
+  convolution_param {
+    num_output: 100
+    pad: 0
+    stride: 1
+    kernel_h: 11
+    kernel_w: 1
+  }
+}
+
+layer {
+  name: "max_pooling2d_1"
+  type: "Pooling"
+  bottom: "conv_layer_1"
+  top: "max_pooling2d_1"
+  pooling_param {
+    pool: MAX
+    kernel_h: 11
+    kernel_w: 1
+    stride: 1
+  }
+}
+
+layer {
+  name: "flatten_1"
+  type: "Reshape"
+  bottom: "max_pooling2d_1"
+  top: "flatten_1"
+  reshape_param {
+    shape {
+      dim: 1
+      dim: 1
+      dim: 3100
+      dim: 1
+    }
+  }
+}
+
+layer {
+  name: "dense_1"
+  type: "InnerProduct"
+  bottom: "flatten_1"
+  top: "dense_1"
+  inner_product_param {
+    num_output: 100
+  }
+}
+
+layer {
+  name: "output"
+  type: "InnerProduct"
+  bottom: "dense_1"
+  top: "output"
+  inner_product_param {
+    num_output: 10
+  }
+}
