@@ -1,2 +1,5 @@
-# reliable-net
-We will think of something down the road.
+
+
+
+
+export PYTHONPATH=/home/cypox/phd/polsl_uvhc/caffe-net/caffe/python:$PYTHONPATH

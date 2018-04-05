@@ -1,0 +1,2 @@
+export LD_LIBRARY_PATH=/opt/Caffe/caffe/build/lib/:$LD_LIBRARY_PATH
+
