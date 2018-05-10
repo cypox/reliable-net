@@ -10,6 +10,9 @@ from torch.autograd import Variable
 from pytorch.layers import BitflipLayer
 
 class NoisyConvolution(object):
+    """
+    Performs noisy convolution flipping bits in the output
+    """
     def __init__(self, channels_in, channels_out, input_shape):
         self._convolution = torch.nn.Conv2d(channels_in,
                                             channels_out,
@@ -18,10 +21,18 @@ class NoisyConvolution(object):
 
         torch.nn.init.xavier_uniform(self._convolution.weight)
 
-    def noisy_activation(self, input: torch.autograd.Variable,
+    def noisy_activation(self,
+                         input: torch.autograd.Variable,
                          error_probability: float):
+        """
+        Build a model built by a convolutional layer and
+        a bitflip layer and return its output
+        :param input: Input tensor
+        :param error_probability: Bitflip probability
+        :return: Output tensor
+        """
         return torch.nn.Sequential(self._convolution,
-                                BitflipLayer(error_probability))(input)
+                                    BitflipLayer(error_probability))(input)
 
 
 def sample_image(input_shape):
@@ -30,7 +41,11 @@ def sample_image(input_shape):
     a uniform distribution over (-1, 1)
     :return:
     """
-    buffer =  255 * np.random.rand(1, input_shape[0], input_shape[1], input_shape[2]).astype('float32')
+    buffer =  255 * np.random.rand(1,
+                                   input_shape[0],
+                                   input_shape[1],
+                                   input_shape[2]).astype('float32')
+
     return Variable(torch.from_numpy(buffer)).float()
 
 def sample_input(input_shape):
@@ -39,11 +54,23 @@ def sample_input(input_shape):
     a uniform distribution over (-1, 1)
     :return:
     """
-    buffer =  2 * np.random.rand(1, 1, input_shape[0], input_shape[1]).astype('float32') - 1
+    buffer =  2 * np.random.rand(1,
+                                 1,
+                                 input_shape[0],
+                                 input_shape[1]).astype('float32') - 1
+
     return Variable(torch.from_numpy(buffer)).float()
 
 
 def cnn_experiment(num_channels, image_size, kernel_size, error_rate):
+    """
+    Run the CNN experiment and report delta between golden and dirty run
+    :param num_channels: Number of channels for the convolutional layer
+    :param image_size: Tuple representing the size of an image (WxH)
+    :param kernel_size: Tuple representing the size of the kernel (WxH)
+    :param error_rate: Error rate for bitflip
+    :return:
+    """
     sample_array = sample_image((num_channels, image_size[0], image_size[1]))
 
     noisy_convolution = NoisyConvolution(1, num_channels, kernel_size)
