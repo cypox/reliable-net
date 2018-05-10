@@ -1,6 +1,6 @@
 import numpy as np
 
-from bit_manipulation import flip_bits
+from pytorch.bit_manipulation import flip_bits
 
 
 def flip_bits_fn(x: np.ndarray, probability: float):

@@ -1,6 +1,6 @@
 import torch
 
-from functors import flip_bits_fn
+from pytorch.functors import flip_bits_fn
 
 
 class BitflipLayer(torch.nn.Module):
